@@ -3,7 +3,8 @@ layout: page
 title: Setting up and getting started
 ---
 
-* Table of Contents {:toc}
+* Table of Contents 
+{:toc}
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -14,7 +15,7 @@ title: Setting up and getting started
 Follow the steps in the following guide precisely. Things will not work out if you deviate in some steps.
 </div>
 
-First, **fork** this repo, and **clone** the fork into your computer.
+Firstly, **fork** this [repo](https://github.com/AY2021S2-CS2103T-W10-2/tp), and **clone** the fork into your computer.
 
 If you plan to use Intellij IDEA (highly recommended):
 
@@ -25,7 +26,7 @@ If you plan to use Intellij IDEA (highly recommended):
    IDEA.<br>
    :exclamation: Note: Importing a Gradle project is slightly different from importing a normal Java project.
 1. **Verify the setup**:
-    1. Run the `seedu.location.Main` and try a few commands.
+    1. Run the `seedu.storemando.Main` and try a few commands.
     1. [Run the tests](Testing.md) to ensure they all pass.
 
 --------------------------------------------------------------------------------------------------------------------

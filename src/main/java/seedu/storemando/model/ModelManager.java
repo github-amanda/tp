@@ -15,6 +15,7 @@ import javafx.collections.transformation.SortedList;
 import seedu.storemando.commons.core.GuiSettings;
 import seedu.storemando.commons.core.LogsCenter;
 import seedu.storemando.model.item.Item;
+import seedu.storemando.model.item.Location;
 
 /**
  * Represents the in-memory model of the storemando data.
@@ -26,6 +27,7 @@ public class ModelManager implements Model {
     private final UserPrefs userPrefs;
     private final FilteredList<Item> filteredItems;
     private final SortedList<Item> sortedItems;
+    private Predicate<Item> currentPredicate;
 
     /**
      * Initializes a ModelManager with the given storeMando and userPrefs.
@@ -40,6 +42,7 @@ public class ModelManager implements Model {
         this.userPrefs = new UserPrefs(userPrefs);
         filteredItems = new FilteredList<>(this.storeMando.getItemList());
         sortedItems = new SortedList<>(this.storeMando.getItemList());
+        this.currentPredicate = x -> true;
     }
 
     public ModelManager() {
@@ -94,9 +97,20 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public ObservableList<Location> getLocationList() {
+        return storeMando.getLocationList();
+    }
+
+    @Override
     public boolean hasItem(Item item) {
         requireNonNull(item);
         return storeMando.hasItem(item);
+    }
+
+    @Override
+    public boolean hasSimilarItem(Item item) {
+        requireNonNull(item);
+        return storeMando.hasSimilarItem(item);
     }
 
     @Override
@@ -139,6 +153,19 @@ public class ModelManager implements Model {
         filteredItems.setPredicate(predicate);
     }
 
+    //=========== Cleared Item List In Location Accessors =============================================================
+
+    /**
+     * Clears all the items in a specified location by the given {@code predicate}.
+     */
+    public void clearLocation(Predicate<Item> predicate) {
+        updateFilteredItemList(predicate);
+        List<Item> filteredList = getFilteredItemList();
+        int numberOfItems = filteredList.size();
+        for (int i = 0; i < numberOfItems; i++) {
+            deleteItem(filteredList.get(0));
+        }
+    }
 
     //=========== Sorted Item List Accessors =============================================================
 
@@ -155,6 +182,22 @@ public class ModelManager implements Model {
     public void updateSortedItemList(Comparator<Item> cmp) {
         requireNonNull(cmp);
         sortedItems.setComparator(cmp);
+    }
+
+    //=========== Predicate Accessors =============================================================
+
+    @Override
+    public Predicate<Item> getCurrentPredicate() {
+        return currentPredicate;
+    }
+
+    @Override
+    public void updateCurrentPredicate(Predicate<Item> other) {
+        if (other.equals(PREDICATE_SHOW_ALL_ITEMS)) {
+            this.currentPredicate = PREDICATE_SHOW_ALL_ITEMS;
+        } else {
+            this.currentPredicate = getCurrentPredicate().and(other);
+        }
     }
 
     @Override

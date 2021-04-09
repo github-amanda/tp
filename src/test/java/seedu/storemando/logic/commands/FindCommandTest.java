@@ -84,16 +84,6 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_zeroKeywords_noItemFound() {
-        String expectedMessage = String.format(MESSAGE_LESS_THAN_TWO_ITEMS_LISTED_OVERVIEW, 0);
-        ItemNameContainsKeywordsPredicate predicate = preparePredicate(" ");
-        FindCommand command = new FindCommand(predicate);
-        expectedModel.updateFilteredItemList(predicate);
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
-        assertEquals(Collections.emptyList(), model.getFilteredItemList());
-    }
-
-    @Test
     public void execute_multipleKeywords_multipleItemsFound() {
         String expectedMessage = String.format(MESSAGE_MORE_THAN_ONE_ITEM_LISTED_OVERVIEW, 3);
         ItemNameContainsKeywordsPredicate predicate = preparePredicate("Cream Eggs Flour");
@@ -101,6 +91,16 @@ public class FindCommandTest {
         expectedModel.updateFilteredItemList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Arrays.asList(CREAM, EGGS, FLOUR), model.getFilteredItemList());
+    }
+
+    @Test
+    public void execute_singleKeyword_singleItemFound() {
+        String expectedMessage = String.format(MESSAGE_LESS_THAN_TWO_ITEMS_LISTED_OVERVIEW, 1);
+        ItemNameContainsKeywordsPredicate predicate = preparePredicate("Eggs");
+        FindCommand command = new FindCommand(predicate);
+        expectedModel.updateFilteredItemList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(Arrays.asList(EGGS), model.getFilteredItemList());
     }
 
     /**

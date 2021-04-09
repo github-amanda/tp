@@ -6,13 +6,15 @@ import static seedu.storemando.commons.util.AppUtil.checkArgument;
 /**
  * Represents a Item's quantity number in the storemando.
  * Guarantees: immutable; is valid as declared in {@link #isValidQuantity(String)}
- * >>>>>>> mid-1.2-base-refactor:src/main/java/seedu/storemando/model/item/Quantity.java
+ *
  */
 public class Quantity {
 
 
+    public static final int MIN_VALUE = 0;
+    public static final int MAX_VALUE = 1000000;
     public static final String MESSAGE_CONSTRAINTS =
-        "Quantity should only contain numbers, and it should be a positive integer greater than 0";
+        "Quantity specified must be greater than 0 and must not exceed 1,000,000.";
     public static final String VALIDATION_REGEX = "\\d+";
 
     public final String value;
@@ -25,14 +27,19 @@ public class Quantity {
     public Quantity(String quantity) {
         requireNonNull(quantity);
         checkArgument(isValidQuantity(quantity), MESSAGE_CONSTRAINTS);
-        value = quantity;
+        assert(Long.valueOf(quantity) > 0);
+        value = Long.valueOf(quantity).toString();
     }
 
     /**
      * Returns true if a given string is a valid quantity number.
      */
     public static boolean isValidQuantity(String test) {
-        return test.matches(VALIDATION_REGEX) && Long.valueOf(test) > 0;
+        try {
+            return test.matches(VALIDATION_REGEX) && Long.valueOf(test) > MIN_VALUE && Long.valueOf(test) <= MAX_VALUE;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     @Override

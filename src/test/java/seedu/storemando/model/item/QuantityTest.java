@@ -32,11 +32,14 @@ public class QuantityTest {
         assertFalse(Quantity.isValidQuantity("quantity")); // non-numeric
         assertFalse(Quantity.isValidQuantity("9011p041")); // alphabets within digits
         assertFalse(Quantity.isValidQuantity("9312 1534")); // spaces within digits
+        assertFalse(Quantity.isValidQuantity("0")); // zero quantity
+        assertFalse(Quantity.isValidQuantity("-1")); // negative quantity
+        assertFalse(Quantity.isValidQuantity("1000001")); // above max value
+        assertFalse(Quantity.isValidQuantity("2147483648")); // above maximum possible integer
 
         // valid quantity numbers
         assertTrue(Quantity.isValidQuantity("9")); // exactly 1 number
-        assertTrue(Quantity.isValidQuantity("93121534"));
-        assertTrue(Quantity.isValidQuantity("124293842033123")); // long quantity numbers
+        assertTrue(Quantity.isValidQuantity("2370")); // large number within the range
     }
 
     @Test
@@ -44,5 +47,17 @@ public class QuantityTest {
         assertTrue(new ItemName(VALID_QUANTITY_CHEESE).compare(new ItemName(VALID_QUANTITY_BANANA)) < 0);
         assertTrue(new ItemName(VALID_QUANTITY_BANANA).compare(new ItemName(VALID_QUANTITY_CHEESE)) > 0);
         assertTrue(new ItemName(VALID_QUANTITY_BANANA).compare(new ItemName(VALID_QUANTITY_BANANA)) == 0);
+    }
+
+
+    @Test
+    public void equals() {
+        Quantity quantity = new Quantity("10");
+        assertTrue(quantity.equals(quantity)); // same object
+        assertTrue(quantity.equals(new Quantity("10"))); // different objects but with same value
+
+        assertFalse(quantity.equals(new Quantity("11"))); // different objects and with different values
+        assertFalse(quantity.equals("11")); // different objects and different types
+        assertFalse(quantity.equals(null)); // null
     }
 }

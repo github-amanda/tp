@@ -2,10 +2,14 @@ package seedu.storemando.model;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.storemando.model.item.Item;
+import seedu.storemando.model.item.Location;
 import seedu.storemando.model.item.UniqueItemList;
 
 /**
@@ -68,6 +72,15 @@ public class StoreMando implements ReadOnlyStoreMando {
     }
 
     /**
+     * Returns true if a item with the similar identity as {@code item} exists in the storemando.
+     */
+    public boolean hasSimilarItem(Item item) {
+        requireNonNull(item);
+        return items.containsSimilar(item);
+    }
+
+
+    /**
      * Adds a item to the storemando.
      * The item must not already exist in the storemando.
      */
@@ -105,6 +118,19 @@ public class StoreMando implements ReadOnlyStoreMando {
     @Override
     public ObservableList<Item> getItemList() {
         return items.asUnmodifiableObservableList();
+    }
+
+    @Override
+    public ObservableList<Location> getLocationList() {
+        HashSet<Location> hashSet = new HashSet<>();
+        ArrayList<Location> locationList = new ArrayList<>();
+        for (Item item : items) {
+            if (!hashSet.contains(item.getLocation())) {
+                hashSet.add(item.getLocation());
+                locationList.add(item.getLocation());
+            }
+        }
+        return FXCollections.observableList(locationList);
     }
 
     @Override

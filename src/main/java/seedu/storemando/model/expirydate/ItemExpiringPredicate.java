@@ -13,6 +13,10 @@ import seedu.storemando.model.item.Item;
 public class ItemExpiringPredicate implements Predicate<Item> {
     private final Long numOfDays;
 
+    /**
+     * Constructor for ItemExpiringPredicate
+     * @param numOfDays  The input number used to filter the expiry date
+     */
     public ItemExpiringPredicate(Long numOfDays) {
         this.numOfDays = numOfDays;
     }
